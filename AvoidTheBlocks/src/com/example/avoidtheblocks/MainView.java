@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -25,6 +26,7 @@ public class MainView extends View {
 		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 		width = displayMetrics.widthPixels;
 		height = displayMetrics.heightPixels;
+		setBackgroundColor(Color.GRAY);
 		initBitmaps();
 		
 
