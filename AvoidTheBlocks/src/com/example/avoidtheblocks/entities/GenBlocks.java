@@ -9,14 +9,16 @@ import android.content.Context;
 
 public class GenBlocks {
 	private ArrayList<Block> blockList = new ArrayList<Block>();
+	private ArrayList<PowerUpBlock> powerUpList = new ArrayList<PowerUpBlock>();
 	private ArrayList<Integer> values = new ArrayList<Integer>();
 	private Context context;
 	private int width;
 	private int height;
 	private Random random = new Random();
-	private int blockspeed = 8;
+	private int blockspeed = 10;
 	private int count = 0;
 	private int score = -1;
+	private boolean powerOpBoolean = false;// power up boolean
 	
 	public GenBlocks(Context context, int width, int height) {
 		this.context = context;
@@ -33,9 +35,9 @@ public class GenBlocks {
 	public void generateBlocks(){	
 		
 		Collections.shuffle(values);
-		int randomValue = random.nextInt(5)+1;
+		int randomValue = random.nextInt((5-3)+1)+3;
 		for (int i = 0; i < randomValue; i++) {
-			Block block = new Block(context, width, height, values.get(i), (int)(height*1.20));
+			Block block = new Block(context, width, height, values.get(i), (int)(height*1.0));
 			block.setSpeed(blockspeed);
 			blockList.add(block);
 		}
@@ -48,7 +50,16 @@ public class GenBlocks {
 		}
 		count++;
 		setScore(getScore() + 1);
-		System.out.println(blockspeed + "  Count = " + count);
+		int powerRandom = random.nextInt(7);
+		if(powerRandom == 0 && powerUpList.size() != 1) {
+			generatePowerUp();
+		}
+		
+		System.out.println(blockspeed + "  Count = " + count + "  Score = " + (score+1));
+	}
+	public void generatePowerUp() {
+			PowerUpBlock powerUpBlock = new PowerUpBlock(context, width, height,values.get(0), (int)(height*1.0));
+			powerUpList.add(powerUpBlock);
 	}
 	
 	public ArrayList<Block> getBlockList() {
@@ -63,6 +74,12 @@ public class GenBlocks {
 	}
 	public void setScore(int score) {
 		this.score = score;
+	}
+	public ArrayList<PowerUpBlock> getPowerUpList() {
+		return powerUpList;
+	}
+	public void setPowerUpList(ArrayList<PowerUpBlock> powerUpList) {
+		this.powerUpList = powerUpList;
 	}
 
 }

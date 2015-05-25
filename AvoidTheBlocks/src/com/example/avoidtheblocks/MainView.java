@@ -36,7 +36,7 @@ public class MainView extends View {
 	protected void onDraw(Canvas canvas) {
 		// TODO Auto-generated method stub
 		super.onDraw(canvas);
-		canvas.drawBitmap(playButton, (int)((width * 0.50) - (playButton.getWidth()/2)), (int)((height * 0.50)- (playButton.getHeight()/2)), null);
+		canvas.drawBitmap(playButton, (int)((width * 0.50) - (playButton.getWidth()/2)), (int)((height * 0.30)- (playButton.getHeight()/2)), null);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class MainView extends View {
 
 		case MotionEvent.ACTION_UP:
 			if( X >(int)((width * 0.50) - (playButton.getWidth()/2)) && X <(int)((width * 0.50) - (playButton.getWidth()/2)) + playButton.getWidth() &&
-	        		Y >((height * 0.50)- (playButton.getHeight()/2)) && Y < ((height * 0.50)- (playButton.getHeight()/2)) + playButton.getHeight() )
+	        		Y >((height * 0.30)- (playButton.getHeight()/2)) && Y < ((height * 0.30)- (playButton.getHeight()/2)) + playButton.getHeight() )
 	             {
 	        		Intent intent = new Intent(context, GameActivity.class);
 	 	        	context.startActivity(intent);
