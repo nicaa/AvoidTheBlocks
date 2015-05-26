@@ -86,9 +86,13 @@ public class GameThread extends Thread{
 		canvas.drawText(genBlocks.getScore()+"", (int)(width*0.45), (int)(height*0.05), paint);
 		for (int i = 0; i < genBlocks.getBlockList().size(); i++) {
 			canvas.drawBitmap(genBlocks.getBlockList().get(i).getSprite(), genBlocks.getBlockList().get(i).getX(), genBlocks.getBlockList().get(i).getY(), null);
+			System.out.println(genBlocks.getBlockList().get(i).getY() + " count = " + i);
 		}
 		for (int i = 0; i < genBlocks.getPowerUpList().size(); i++) {
 			canvas.drawBitmap(genBlocks.getPowerUpList().get(i).getSprite(), genBlocks.getPowerUpList().get(i).getX(), genBlocks.getPowerUpList().get(i).getY(), null);
+		}
+		for (int i = 0; i < genBlocks.getPowerUpCoinList().size(); i++) {
+			canvas.drawBitmap(genBlocks.getPowerUpCoinList().get(i).getSprite(), genBlocks.getPowerUpCoinList().get(i).getX(), genBlocks.getPowerUpCoinList().get(i).getY(), null);
 		}
 		
 		player.drawPowerUps(canvas);
@@ -105,17 +109,24 @@ public class GameThread extends Thread{
 	public void moveBlocks(){
 		
 		for (int i = 0; i < genBlocks.getBlockList().size(); i++) {
-			genBlocks.getBlockList().get(i).moveUp();
 			if(genBlocks.getBlockList().get(i).getY() < 0 - (int)(height* 0.15)){
 				genBlocks.getBlockList().clear();
 				genBlocks.generateBlocks();
 			}
+			genBlocks.getBlockList().get(i).moveUp();
 		}
 		
 		for (int i = 0; i < genBlocks.getPowerUpList().size(); i++) {
 			genBlocks.getPowerUpList().get(i).moveUp();
 			if(genBlocks.getPowerUpList().get(i).getY() < 0 - (int)(height* 0.15)){
 				genBlocks.getPowerUpList().remove(i);
+			}
+		}
+		
+		for (int i = 0; i < genBlocks.getPowerUpCoinList().size(); i++) {
+			genBlocks.getPowerUpCoinList().get(i).moveUp();
+			if(genBlocks.getPowerUpCoinList().get(i).getY() < 0 - (int)(height* 0.15)){
+				genBlocks.getPowerUpCoinList().remove(i);
 			}
 		}
 	}
@@ -134,8 +145,6 @@ public class GameThread extends Thread{
 			case MotionEvent.ACTION_UP:
 				if (X < width / 2 && player.getX()>0) {
 					player.moveLeft();
-					//genBlocks.getBlockList().clear(); Use this in special move!!!
-					//genBlocks.generateBlocks();
 				}else if(X > width / 2 && player.getX() + player.getSprite().getWidth() < width){
 					player.moveRight();
 				}
@@ -159,7 +168,6 @@ public class GameThread extends Thread{
 				genBlocks.getBlockList().remove(i);
 				player.getPowerUpList().remove(0);
 			}else if(player.collision(player.getRect(), genBlocks.getBlockList().get(i).getRect())){
-				System.out.println("Collision!!");
 				canvas.drawText("You lost!", (int)(width * 0.15), (int)(height*0.45), paintRed);
 				setRunning(false);
 			}
@@ -168,6 +176,12 @@ public class GameThread extends Thread{
 			if(player.collision(player.getRect(), genBlocks.getPowerUpList().get(i).getRect()) && player.getPowerUpList().size()!=2){
 				genBlocks.getPowerUpList().remove(i);
 				player.getPowerUpList().add(player.getPowerUp());
+			}
+		}
+		for (int i = 0; i < genBlocks.getPowerUpCoinList().size(); i++) {
+			if(player.collision(player.getRect(), genBlocks.getPowerUpCoinList().get(i).getRect())){
+				genBlocks.getPowerUpCoinList().remove(i);
+				genBlocks.setScore(genBlocks.getScore() + 1);
 			}
 		}
 		

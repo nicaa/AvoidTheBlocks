@@ -9,7 +9,8 @@ import android.content.Context;
 
 public class GenBlocks {
 	private ArrayList<Block> blockList = new ArrayList<Block>();
-	private ArrayList<PowerUpBlock> powerUpList = new ArrayList<PowerUpBlock>();
+	private ArrayList<PowerUpShield> powerUpShieldList = new ArrayList<PowerUpShield>();
+	private ArrayList<PowerUpCoin> powerUpCoinList = new ArrayList<PowerUpCoin>();
 	private ArrayList<Integer> values = new ArrayList<Integer>();
 	private Context context;
 	private int width;
@@ -37,7 +38,8 @@ public class GenBlocks {
 		Collections.shuffle(values);
 		int randomValue = random.nextInt((5-3)+1)+3;
 		for (int i = 0; i < randomValue; i++) {
-			Block block = new Block(context, width, height, values.get(i), (int)(height*1.0));
+			Block block = new Block(context, width, height, values.get(i), (int)(height));
+			
 			block.setSpeed(blockspeed);
 			blockList.add(block);
 		}
@@ -51,16 +53,24 @@ public class GenBlocks {
 		count++;
 		setScore(getScore() + 1);
 		int powerRandom = random.nextInt(7);
-		if(powerRandom == 0 && powerUpList.size() != 1) {
-			generatePowerUp();
+		if(powerRandom == 0 && powerUpShieldList.size() != 1) {
+			generatePowerUpShield();
+		}else if (powerRandom < 5 ) {
+			generatePowerUpCoin();
 		}
 		
 		System.out.println(blockspeed + "  Count = " + count + "  Score = " + (score+1));
 	}
-	public void generatePowerUp() {
-			PowerUpBlock powerUpBlock = new PowerUpBlock(context, width, height,values.get(0), (int)(height*1.0));
-			powerUpList.add(powerUpBlock);
+	
+	public void generatePowerUpShield() {
+			PowerUpShield powerUpBlock = new PowerUpShield(context, width, height,values.get(0), (int)(height*1.0));
+			powerUpShieldList.add(powerUpBlock);
 	}
+	
+	public void generatePowerUpCoin() {
+		PowerUpCoin powerUpBlock = new PowerUpCoin(context, width, height,values.get(0), (int)(height*1.0));
+		powerUpCoinList.add(powerUpBlock);
+}
 	
 	public ArrayList<Block> getBlockList() {
 		return blockList;
@@ -75,11 +85,17 @@ public class GenBlocks {
 	public void setScore(int score) {
 		this.score = score;
 	}
-	public ArrayList<PowerUpBlock> getPowerUpList() {
-		return powerUpList;
+	public ArrayList<PowerUpShield> getPowerUpList() {
+		return powerUpShieldList;
 	}
-	public void setPowerUpList(ArrayList<PowerUpBlock> powerUpList) {
-		this.powerUpList = powerUpList;
+	public void setPowerUpList(ArrayList<PowerUpShield> powerUpList) {
+		this.powerUpShieldList = powerUpList;
+	}
+	public ArrayList<PowerUpCoin> getPowerUpCoinList() {
+		return powerUpCoinList;
+	}
+	public void setPowerUpCoinList(ArrayList<PowerUpCoin> powerUpCoinList) {
+		this.powerUpCoinList = powerUpCoinList;
 	}
 
 }

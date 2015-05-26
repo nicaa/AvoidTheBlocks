@@ -3,6 +3,7 @@ package com.example.avoidtheblocks;
 
 
 import com.example.avoidtheblocks.gamepackage.GameActivity;
+import com.example.avoidtheblocks.utils.BitmapHolder;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ public class MainView extends View {
 		width = displayMetrics.widthPixels;
 		height = displayMetrics.heightPixels;
 		setBackgroundColor(Color.GRAY);
+		BitmapHolder bitmapHolder = new BitmapHolder(context, width, height);
 		initBitmaps();
 		
 

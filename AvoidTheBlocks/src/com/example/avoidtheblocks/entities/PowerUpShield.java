@@ -8,34 +8,29 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
-public class Block extends Entity{
-	private Context context;
-	private Bitmap block;
-	private int speed;
+public class PowerUpShield extends Entity{
 	
-	public Block(Context context, int width, int height, int x , int y) {
-		super();
+	private Context context;
+	private Bitmap powerUp;
+	private int speed; 
+	
+	
+	public PowerUpShield(Context context, int width, int height, int x , int y){
 		this.context = context;
 		setX(x);
 		setY(y);
-		
 		setHeight(height);
 		setWidth(width);
-		//speed = (int)(getHeight() * 0.006);
+		speed = (int)(width*0.007);
 		initBitmaps();
-		setSprite(block);
+		setSprite(powerUp);
 		setRect(new Rect(getX(), getY(),  getX() + getSprite().getWidth(),getX() + getSprite().getHeight()));
-		
-	}
-	public void initBitmaps(){
-		block = BitmapHolder.enemyBlock;
-	}
-	public void placeBlock(int x, int y){
-		setX(x);
-		setY(y);
-		getRect().set(getX(), getY(),  getX() + getSprite().getWidth(),getY() + getSprite().getHeight());
 	}
 	
+	
+	public void initBitmaps(){
+		powerUp = BitmapHolder.powerUpBlock;
+	}
 	
 	public void moveUp() {
 		setY(getY() - speed);
@@ -49,4 +44,5 @@ public class Block extends Entity{
 	public void setSpeed(int speed) {
 		this.speed = speed;
 	}
+	
 }
