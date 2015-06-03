@@ -39,6 +39,7 @@ public class MainView extends View {
 		BitmapHolder bitmapHolder = new BitmapHolder(context, width, height);
 		highscoreHandler = new HighscoreHandler(context);
 		highscoreHandler.retrieveHighscore();
+		
 		initBitmaps();
 		
 

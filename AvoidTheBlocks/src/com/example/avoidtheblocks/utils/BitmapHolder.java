@@ -10,6 +10,8 @@ public class BitmapHolder {
 	public static Bitmap enemyBlock;
 	public static Bitmap powerUpBlock;
 	public static Bitmap powerUpCoin;
+	public static Bitmap retryButton;
+	public static Bitmap quitButton;
 	
 	public BitmapHolder (Context context, int width, int height){
 		
@@ -21,6 +23,13 @@ public class BitmapHolder {
 		
 		powerUpCoin = BitmapFactory.decodeResource(context.getResources(), R.drawable.powerupcoin);       
 		powerUpCoin = Bitmap.createScaledBitmap(powerUpCoin,(int)(width * 0.168), (int)(height * 0.1), true);
+		
+		retryButton = BitmapFactory.decodeResource(context.getResources(), R.drawable.retrybutton);       
+		retryButton = Bitmap.createScaledBitmap(retryButton,(int)(width * 0.50), (int)(height * 0.12), true);
+		
+		quitButton = BitmapFactory.decodeResource(context.getResources(), R.drawable.quitbutton);       
+		quitButton = Bitmap.createScaledBitmap(quitButton,(int)(width * 0.40), (int)(height * 0.10), true);
+		
 		
 		
 	}

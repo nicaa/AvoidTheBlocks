@@ -39,7 +39,7 @@ public class HighscoreView extends View {
 	protected void onDraw(Canvas canvas) {
 		// TODO Auto-generated method stub
 		super.onDraw(canvas);
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < HighscoreHandler.highscores.size(); i++) {
 			canvas.drawText("Nr " + (i+1)+ ": " + HighscoreHandler.highscores.get(i), (int)(width*0.30), (int)(height*0.17) * (i+1), paint);
 		}
 	}

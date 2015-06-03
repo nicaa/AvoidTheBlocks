@@ -8,9 +8,14 @@ import java.util.Collections;
 import com.example.avoidtheblocks.entities.GenBlocks;
 import com.example.avoidtheblocks.entities.Player;
 import com.example.avoidtheblocks.highscore.Highscore;
+import com.example.avoidtheblocks.highscore.HighscoreActivity;
 import com.example.avoidtheblocks.highscore.HighscoreHandler;
+import com.example.avoidtheblocks.utils.BitmapHolder;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -31,11 +36,14 @@ public class GameThread extends Thread{
 	
 	private boolean debug = false; // <-- used for easier testing in game! true = debug functions enable
 	private boolean test = false;
+	private boolean dead = false;
 	private int width;
 	private int height;
 	private Player player;
 	private GenBlocks genBlocks;
 	private HighscoreHandler highscoreHandler;
+	private Bitmap retryButton;
+	private Bitmap quitButton;
 
 	public GameThread(SurfaceHolder surfaceHolder, GameScreen GameScreen) {
 		this.gameScreen = GameScreen;
@@ -49,12 +57,17 @@ public class GameThread extends Thread{
 		paint.setTextSize((int)(width*0.10));
 		paint.setAntiAlias(true);
 		
-		paintRed.setColor(Color.RED);
-		paintRed.setTextSize((int)(width*0.18));
+		paintRed.setColor(Color.parseColor("#FF8914"));
+		paintRed.setTextSize((int)(width*0.15));
+		paintRed.setAntiAlias(true);
 		genBlocks = new GenBlocks(context, width, height);
 		paintGrey.setColor(Color.GRAY);
 		genBlocks.generateBlocks();
 		highscoreHandler = new HighscoreHandler(context);
+		
+		retryButton = BitmapHolder.retryButton;
+		quitButton = BitmapHolder.quitButton;
+		
 	}
 	
 	
@@ -69,12 +82,10 @@ public class GameThread extends Thread{
 			Canvas c = new Canvas();
 			try {
 				c = surfaceHolder.lockCanvas(null);
-				// Syncronized så der kun er en der kan tegne af gangen da vi
-				// arbejder med threads
 				synchronized (surfaceHolder) {
 					if (c != null) {
 						c.drawColor(Color.DKGRAY);
-						Collision(c);
+						Collision();
 						doDraw(c);
 						moveBlocks();
 					}
@@ -84,8 +95,7 @@ public class GameThread extends Thread{
             
 			} finally {
 				if (c != null) {
-					surfaceHolder.unlockCanvasAndPost(c); // unlocker så der kan
-					// tegnes igen.
+					surfaceHolder.unlockCanvasAndPost(c); 
 				}
 			}
 		}
@@ -93,17 +103,17 @@ public class GameThread extends Thread{
 	public void doDraw(Canvas canvas){
 		canvas.drawBitmap(player.getSprite(), player.getX(), player.getY(), null);
 		
-		for (int i = 0; i < genBlocks.getBlockList().size(); i++) {
-			canvas.drawBitmap(genBlocks.getBlockList().get(i).getSprite(), genBlocks.getBlockList().get(i).getX(), genBlocks.getBlockList().get(i).getY(), null);
-			System.out.println(genBlocks.getBlockList().get(i).getY() + " count = " + i);
-		}
 		for (int i = 0; i < genBlocks.getPowerUpList().size(); i++) {
 			canvas.drawBitmap(genBlocks.getPowerUpList().get(i).getSprite(), genBlocks.getPowerUpList().get(i).getX(), genBlocks.getPowerUpList().get(i).getY(), null);
 		}
 		for (int i = 0; i < genBlocks.getPowerUpCoinList().size(); i++) {
 			canvas.drawBitmap(genBlocks.getPowerUpCoinList().get(i).getSprite(), genBlocks.getPowerUpCoinList().get(i).getX(), genBlocks.getPowerUpCoinList().get(i).getY(), null);
 		}
-		
+
+		for (int i = 0; i < genBlocks.getBlockList().size(); i++) {
+			canvas.drawBitmap(genBlocks.getBlockList().get(i).getSprite(), genBlocks.getBlockList().get(i).getX(), genBlocks.getBlockList().get(i).getY(), null);
+			System.out.println(genBlocks.getBlockList().get(i).getY() + " count = " + i);
+		}
 		player.drawPowerUps(canvas);
 		player.drawPowerUpFrame(canvas);
 		
@@ -114,6 +124,13 @@ public class GameThread extends Thread{
 			}
 		}
 		canvas.drawText(genBlocks.getScore()+"", (int)(width*0.45), (int)(height*0.05), paint);
+		if (!running) {
+			canvas.drawBitmap(retryButton, (int)(width*0.50)- (retryButton.getWidth()/2), (int)(height*0.70), null);
+			canvas.drawBitmap(quitButton, (int)(width*0.50)- (quitButton.getWidth()/2), (int)(height*0.82), null);
+			canvas.drawText("You lost!", (int)(width * 0.20), (int)(height*0.45), paintRed);
+			canvas.drawText("Score: " + genBlocks.getScore(), (int)(width * 0.20), (int)(height*0.55), paintRed);
+		}
+		
 		
 	}
 	public void moveBlocks(){
@@ -154,22 +171,36 @@ public class GameThread extends Thread{
 			int Y = (int) event.getY();
 			
 			switch (eventAction) {
-			case MotionEvent.ACTION_DOWN:
-				
-				break;
-			case MotionEvent.ACTION_UP:
-				if (X < width / 2 && player.getX()>0) {
-					player.moveLeft();
-				}else if(X > width / 2 && player.getX() + player.getSprite().getWidth() < width){
-					player.moveRight();
+				case MotionEvent.ACTION_DOWN:
+					
+					break;
+				case MotionEvent.ACTION_UP:
+					if (X < width / 2 && player.getX()>0) {
+						player.moveLeft();
+					}else if(X > width / 2 && player.getX() + player.getSprite().getWidth() < width){
+						player.moveRight();
+					}
+					
+					if(!running && X >(int)((width * 0.50) - (retryButton.getWidth()/2)) && X <(int)((width * 0.50) - (retryButton.getWidth()/2)) + retryButton.getWidth() &&
+		    		Y >(height * 0.70) && Y < (height * 0.70) + retryButton.getHeight() )
+				         {
+							((Activity)context).finish();
+				    		Intent intent = new Intent(context, GameActivity.class);
+			 	        	context.startActivity(intent);
+				    		
+				         }
+					if(!running && X >(int)((width * 0.50) - (quitButton.getWidth()/2)) && X <(int)((width * 0.50) - (quitButton.getWidth()/2)) + quitButton.getWidth() &&
+		    		Y >(height * 0.82) && Y < (height * 0.82) + quitButton.getHeight() )
+				         {
+							((Activity)context).finish();
+						
+				         }
+					
+					break;
+				case MotionEvent.ACTION_MOVE:
+					
+					break;
 				}
-				
-				
-				break;
-			case MotionEvent.ACTION_MOVE:
-				
-				break;
-			}
 			 
 			return true;
 		}
@@ -177,13 +208,13 @@ public class GameThread extends Thread{
 	}
 	
 	
-	public void Collision(Canvas canvas){
+	public void Collision(){
 		for (int i = 0; i < genBlocks.getBlockList().size(); i++) {
 			if(player.collision(player.getRect(), genBlocks.getBlockList().get(i).getRect())&& player.getPowerUpList().size()>0){
 				genBlocks.getBlockList().remove(i);
 				player.getPowerUpList().remove(0);
 			}else if(player.collision(player.getRect(), genBlocks.getBlockList().get(i).getRect())){
-				canvas.drawText("You lost!", (int)(width * 0.15), (int)(height*0.45), paintRed);
+				
 				insertHighscore();
 				setRunning(false);
 			}
@@ -209,7 +240,7 @@ public class GameThread extends Thread{
 		Collections.sort(HighscoreHandler.highscores, Collections.reverseOrder());
 		
 		for (int i = 0; i < HighscoreHandler.highscores.size(); i++) {
-			if(i>=5){
+			if(i >= 5){
 				HighscoreHandler.highscores.remove(i);
 			}
 		}
@@ -219,7 +250,11 @@ public class GameThread extends Thread{
 		
 	}
 	
-	
-	
-
+	public void dead(){
+		genBlocks.getBlockList().clear();
+		genBlocks.getPowerUpCoinList().clear();
+		genBlocks.getPowerUpList().clear();
+		genBlocks.generateBlocks();
+		genBlocks.setScore(0);
+	}
 }

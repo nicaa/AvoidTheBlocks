@@ -29,8 +29,8 @@ public class GameScreen extends SurfaceView implements SurfaceHolder.Callback{
 		
 		getHolder().addCallback(this);
 		gameThread = new GameThread(getHolder(), this);// henter SurfaceHolder
-												// og denne classe.
-//		setBackgroundColor(Color.BLUE);
+								// og denne classe.
+		
 		setFocusable(true);
 	}
 
@@ -62,7 +62,6 @@ public class GameScreen extends SurfaceView implements SurfaceHolder.Callback{
 		
 		this.height = height;
 		this.height = width;
-//		System.out.println("kig her!!" + height + "     " + width);
 		
 	}
 

@@ -33,6 +33,8 @@ public final class R {
         public static final int powerupframe=0x7f020008;
         public static final int powerupshield=0x7f020009;
         public static final int powerupshieldicon=0x7f02000a;
+        public static final int quitbutton=0x7f02000b;
+        public static final int retrybutton=0x7f02000c;
     }
     public static final class layout {
         public static final int activity_game=0x7f030000;
