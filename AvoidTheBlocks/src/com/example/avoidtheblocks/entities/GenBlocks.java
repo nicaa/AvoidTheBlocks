@@ -40,12 +40,12 @@ public class GenBlocks {
 		for (int i = 0; i < randomValue; i++) {
 			Block block = new Block(context, width, height, values.get(i), (int)(height));
 			
-			block.setSpeed(blockspeed);
+			block.setSpeed(getBlockspeed());
 			blockList.add(block);
 		}
 		if (count == 4) {
-			if (blockspeed <= 24) {
-				blockspeed+=(int)(height * 0.001);
+			if (getBlockspeed() <= 24) {
+				setBlockspeed(getBlockspeed() + (int)(height * 0.001));
 			}
 			
 			count = 0;
@@ -59,7 +59,7 @@ public class GenBlocks {
 			generatePowerUpCoin();
 		}
 		
-		System.out.println(blockspeed + "  Count = " + count + "  Score = " + (score+1));
+		System.out.println(getBlockspeed() + "  Count = " + count + "  Score = " + (score+1));
 	}
 	
 	public void generatePowerUpShield() {
@@ -96,6 +96,12 @@ public class GenBlocks {
 	}
 	public void setPowerUpCoinList(ArrayList<PowerUpCoin> powerUpCoinList) {
 		this.powerUpCoinList = powerUpCoinList;
+	}
+	public int getBlockspeed() {
+		return blockspeed;
+	}
+	public void setBlockspeed(int blockspeed) {
+		this.blockspeed = blockspeed;
 	}
 
 }

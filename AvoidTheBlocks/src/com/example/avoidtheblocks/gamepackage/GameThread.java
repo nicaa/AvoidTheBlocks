@@ -3,8 +3,12 @@ package com.example.avoidtheblocks.gamepackage;
 
 
 
+import java.util.Collections;
+
 import com.example.avoidtheblocks.entities.GenBlocks;
 import com.example.avoidtheblocks.entities.Player;
+import com.example.avoidtheblocks.highscore.Highscore;
+import com.example.avoidtheblocks.highscore.HighscoreHandler;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -26,10 +30,12 @@ public class GameThread extends Thread{
 	private Paint paintGrey = new Paint();
 	
 	private boolean debug = false; // <-- used for easier testing in game! true = debug functions enable
+	private boolean test = false;
 	private int width;
 	private int height;
 	private Player player;
 	private GenBlocks genBlocks;
+	private HighscoreHandler highscoreHandler;
 
 	public GameThread(SurfaceHolder surfaceHolder, GameScreen GameScreen) {
 		this.gameScreen = GameScreen;
@@ -39,13 +45,16 @@ public class GameThread extends Thread{
 		width = display.widthPixels;
 		height = display.heightPixels;	
 		player = new Player(context, width, height);
-		paint.setColor(Color.GREEN);
+		paint.setColor(Color.parseColor("#FF8914"));
 		paint.setTextSize((int)(width*0.10));
+		paint.setAntiAlias(true);
+		
 		paintRed.setColor(Color.RED);
 		paintRed.setTextSize((int)(width*0.18));
 		genBlocks = new GenBlocks(context, width, height);
 		paintGrey.setColor(Color.GRAY);
 		genBlocks.generateBlocks();
+		highscoreHandler = new HighscoreHandler(context);
 	}
 	
 	
@@ -83,7 +92,7 @@ public class GameThread extends Thread{
 	}
 	public void doDraw(Canvas canvas){
 		canvas.drawBitmap(player.getSprite(), player.getX(), player.getY(), null);
-		canvas.drawText(genBlocks.getScore()+"", (int)(width*0.45), (int)(height*0.05), paint);
+		
 		for (int i = 0; i < genBlocks.getBlockList().size(); i++) {
 			canvas.drawBitmap(genBlocks.getBlockList().get(i).getSprite(), genBlocks.getBlockList().get(i).getX(), genBlocks.getBlockList().get(i).getY(), null);
 			System.out.println(genBlocks.getBlockList().get(i).getY() + " count = " + i);
@@ -104,17 +113,23 @@ public class GameThread extends Thread{
 				canvas.drawLine((int)(width*0.168)*i, 0, (int)(width*0.168)*i, height, paintGrey);
 			}
 		}
+		canvas.drawText(genBlocks.getScore()+"", (int)(width*0.45), (int)(height*0.05), paint);
 		
 	}
 	public void moveBlocks(){
-		
 		for (int i = 0; i < genBlocks.getBlockList().size(); i++) {
 			if(genBlocks.getBlockList().get(i).getY() < 0 - (int)(height* 0.15)){
-				genBlocks.getBlockList().clear();
+				
+				genBlocks.getBlockList().clear();		
 				genBlocks.generateBlocks();
 			}
+			/*if (genBlocks.getBlockList().get(0).getY() == 0 - genBlocks.getBlockspeed()) {
+				
+				
+			}*/
 			genBlocks.getBlockList().get(i).moveUp();
 		}
+		
 		
 		for (int i = 0; i < genBlocks.getPowerUpList().size(); i++) {
 			genBlocks.getPowerUpList().get(i).moveUp();
@@ -169,6 +184,7 @@ public class GameThread extends Thread{
 				player.getPowerUpList().remove(0);
 			}else if(player.collision(player.getRect(), genBlocks.getBlockList().get(i).getRect())){
 				canvas.drawText("You lost!", (int)(width * 0.15), (int)(height*0.45), paintRed);
+				insertHighscore();
 				setRunning(false);
 			}
 		}
@@ -187,6 +203,21 @@ public class GameThread extends Thread{
 		
 	}
 	
+	public void insertHighscore(){
+		highscoreHandler.retrieveHighscore();
+		HighscoreHandler.highscores.add(genBlocks.getScore());
+		Collections.sort(HighscoreHandler.highscores, Collections.reverseOrder());
+		
+		for (int i = 0; i < HighscoreHandler.highscores.size(); i++) {
+			if(i>=5){
+				HighscoreHandler.highscores.remove(i);
+			}
+		}
+		
+		highscoreHandler.saveHighscore();
+		
+		
+	}
 	
 	
 	
