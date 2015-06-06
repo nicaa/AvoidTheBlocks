@@ -3,8 +3,10 @@ package com.example.avoidtheblocks.gamepackage;
 
 import com.example.avoidtheblocks.entities.GenBlocks;
 
+import advertisement.AdActivity;
 import android.R.color;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -38,9 +40,8 @@ public class GameScreen extends SurfaceView implements SurfaceHolder.Callback{
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		
-		
 	}
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
@@ -85,5 +86,5 @@ public class GameScreen extends SurfaceView implements SurfaceHolder.Callback{
 			}
 		}
 	}
-
+	
 }

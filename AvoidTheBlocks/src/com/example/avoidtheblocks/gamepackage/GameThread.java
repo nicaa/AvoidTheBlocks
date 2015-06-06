@@ -4,6 +4,7 @@ package com.example.avoidtheblocks.gamepackage;
 
 
 import java.util.Collections;
+import java.util.Random;
 
 import com.example.avoidtheblocks.entities.GenBlocks;
 import com.example.avoidtheblocks.entities.Player;
@@ -12,6 +13,7 @@ import com.example.avoidtheblocks.highscore.HighscoreActivity;
 import com.example.avoidtheblocks.highscore.HighscoreHandler;
 import com.example.avoidtheblocks.utils.BitmapHolder;
 
+import advertisement.AdActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -44,6 +46,7 @@ public class GameThread extends Thread{
 	private HighscoreHandler highscoreHandler;
 	private Bitmap retryButton;
 	private Bitmap quitButton;
+	private Random random = new Random();
 
 	public GameThread(SurfaceHolder surfaceHolder, GameScreen GameScreen) {
 		this.gameScreen = GameScreen;
@@ -99,6 +102,7 @@ public class GameThread extends Thread{
 				}
 			}
 		}
+		
 	}
 	public void doDraw(Canvas canvas){
 		canvas.drawBitmap(player.getSprite(), player.getX(), player.getY(), null);
@@ -112,7 +116,7 @@ public class GameThread extends Thread{
 
 		for (int i = 0; i < genBlocks.getBlockList().size(); i++) {
 			canvas.drawBitmap(genBlocks.getBlockList().get(i).getSprite(), genBlocks.getBlockList().get(i).getX(), genBlocks.getBlockList().get(i).getY(), null);
-			System.out.println(genBlocks.getBlockList().get(i).getY() + " count = " + i);
+			//System.out.println(genBlocks.getBlockList().get(i).getY() + " count = " + i);
 		}
 		player.drawPowerUps(canvas);
 		player.drawPowerUpFrame(canvas);
@@ -140,10 +144,7 @@ public class GameThread extends Thread{
 				genBlocks.getBlockList().clear();		
 				genBlocks.generateBlocks();
 			}
-			/*if (genBlocks.getBlockList().get(0).getY() == 0 - genBlocks.getBlockspeed()) {
-				
-				
-			}*/
+
 			genBlocks.getBlockList().get(i).moveUp();
 		}
 		
@@ -185,15 +186,20 @@ public class GameThread extends Thread{
 		    		Y >(height * 0.70) && Y < (height * 0.70) + retryButton.getHeight() )
 				         {
 							((Activity)context).finish();
+							
 				    		Intent intent = new Intent(context, GameActivity.class);
 			 	        	context.startActivity(intent);
-				    		
+			 	        	int adNumber = random.nextInt(4);
+			 	        	if (adNumber == 0) {
+			 	        		runAd();
+							}
+			 	        	
 				         }
 					if(!running && X >(int)((width * 0.50) - (quitButton.getWidth()/2)) && X <(int)((width * 0.50) - (quitButton.getWidth()/2)) + quitButton.getWidth() &&
 		    		Y >(height * 0.82) && Y < (height * 0.82) + quitButton.getHeight() )
 				         {
 							((Activity)context).finish();
-						
+							runAd();
 				         }
 					
 					break;
@@ -217,6 +223,7 @@ public class GameThread extends Thread{
 				
 				insertHighscore();
 				setRunning(false);
+				
 			}
 		}
 		for (int i = 0; i < genBlocks.getPowerUpList().size(); i++) {
@@ -232,6 +239,7 @@ public class GameThread extends Thread{
 			}
 		}
 		
+		
 	}
 	
 	public void insertHighscore(){
@@ -244,17 +252,11 @@ public class GameThread extends Thread{
 				HighscoreHandler.highscores.remove(i);
 			}
 		}
-		
 		highscoreHandler.saveHighscore();
-		
-		
 	}
 	
-	public void dead(){
-		genBlocks.getBlockList().clear();
-		genBlocks.getPowerUpCoinList().clear();
-		genBlocks.getPowerUpList().clear();
-		genBlocks.generateBlocks();
-		genBlocks.setScore(0);
+	public void runAd(){
+		Intent intent = new Intent(context, AdActivity.class);
+        context.startActivity(intent);
 	}
 }

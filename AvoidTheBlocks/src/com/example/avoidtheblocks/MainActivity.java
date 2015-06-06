@@ -1,6 +1,9 @@
 package com.example.avoidtheblocks;
 
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -11,7 +14,6 @@ import android.view.WindowManager;
 
 
 public class MainActivity extends Activity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +24,14 @@ public class MainActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         MainView view = new MainView(this);
         setContentView(view);
+        
+        
+        /*AdView mAdView = new AdView(this);      
+        AdRequest adRequest = new AdRequest.Builder()
+            .addTestDevice("SH46FWR03362")
+            .build();
+        mAdView.loadAd(adRequest);*/
+        
     }
 
 

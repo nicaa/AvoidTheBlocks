@@ -8,6 +8,7 @@ import com.example.avoidtheblocks.highscore.HighscoreActivity;
 import com.example.avoidtheblocks.highscore.HighscoreHandler;
 import com.example.avoidtheblocks.utils.BitmapHolder;
 
+import advertisement.AdActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -97,7 +98,7 @@ public class MainView extends View {
 		highScore = Bitmap.createScaledBitmap(highScore,(int)(width * 0.65), (int)(height * 0.15), true);
 		
 		menuText = BitmapFactory.decodeResource(this.getResources(), R.drawable.menuscreen);       
-		menuText = Bitmap.createScaledBitmap(menuText,(int)(width ), (int)(height * 0.38), true);
+		menuText = Bitmap.createScaledBitmap(menuText,(int)(width ), (int)(height * 0.30), true);
 		
 		menuInfo = BitmapFactory.decodeResource(this.getResources(), R.drawable.menuinfo);       
 		menuInfo = Bitmap.createScaledBitmap(menuInfo,(int)(width * 0.60 ), (int)(height * 0.22), true);
