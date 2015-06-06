@@ -44,7 +44,7 @@ public class GenBlocks {
 			blockList.add(block);
 		}
 		if (count == 4) {
-			if (getBlockspeed() <= 24) {
+			if (getBlockspeed() <= 20) {
 				setBlockspeed(getBlockspeed() + (int)(height * 0.001));
 			}
 			
@@ -59,7 +59,7 @@ public class GenBlocks {
 			generatePowerUpCoin();
 		}
 		
-		System.out.println(getBlockspeed() + "  Count = " + count + "  Score = " + (score+1));
+		System.out.println( "Speed: " + getBlockspeed() + "  Count = " + count + "  Score = " + (score+1));
 	}
 	
 	public void generatePowerUpShield() {

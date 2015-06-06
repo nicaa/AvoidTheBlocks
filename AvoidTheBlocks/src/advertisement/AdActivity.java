@@ -36,9 +36,7 @@ public class AdActivity extends Activity {
 	}
 	
 	private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder()
-                  .addTestDevice("YOUR_DEVICE_HASH")
-                  .build();
+        AdRequest adRequest = new AdRequest.Builder().build();
 
         mInterstitialAd.loadAd(adRequest);
         mInterstitialAd.setAdListener(new AdListener(){
