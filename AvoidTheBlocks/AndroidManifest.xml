@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.avoidtheblocks"
+    package="com.dk.nichlasandreasen.avoidtheblocks"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -14,7 +14,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/appicon"
         android:label="@string/app_name" >
 
         <!-- This meta-data tag is required to use Google Play Services. -->
@@ -23,7 +23,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.dk.nichlasandreasen.avoidtheblocks.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,11 +32,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".gamepackage.GameActivity"
+            android:name="com.dk.nichlasandreasen.avoidtheblocks.gamepackage.GameActivity"
             android:label="@string/title_activity_game" >
         </activity>
         <activity
-            android:name=".highscore.HighscoreActivity"
+            android:name="com.dk.nichlasandreasen.avoidtheblocks.highscore.HighscoreActivity"
             android:label="@string/title_activity_highscore" >
         </activity>
         <!-- Include the AdActivity configChanges and theme. -->
@@ -45,7 +45,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
         <activity
-            android:name="advertisement.AdActivity"
+            android:name="com.dk.nichlasandreasen.avoidtheblocks.advertisement.AdActivity"
             android:label="@string/title_activity_ad" >
         </activity>
     </application>
